@@ -1,38 +1,46 @@
-
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <deque>
-#include <stack>
 #include <assert.h>
 
+// Answers: DHBJQJCCW , WJVRLSJJT
+
+void print_top_boxes(std::vector<std::deque<char>>& boxes)
+{
+    for (auto const& stack : boxes)
+    {
+        if (!stack.empty()) {
+            std::cout << stack.back();
+        }
+    }
+    std::cout << "\n";
+}
 
 int main()
 {
-    std::cout << "Advent of Code - Day 5\n\n";
+    std::cout << "=========================================\n";
+    std::cout << "Advent of Code - Day 5\n";
+    std::cout << "=========================================\n";
 
-    // Read file content into stack
     std::ifstream input("input5");
     std::string line;
     std::vector<std::deque<char>> boxes{50};
+    std::vector<std::vector<uint64_t>> move_instructions;
     while (std::getline(input, line))
     {
         uint16_t n_char = 0;
         uint16_t col = 0;
         bool read_box = false;
-
-        std::cout << line << "\n";
-
         if (line[0] != 'm')
         {
-            // Place boxes in a vector of queues
+            // Place boxes in a vector of deque
             for (auto const c : line)
             {
                 if (read_box)
                 {
-                    boxes.at(col).push_front(c);
-                    std::cout << "Added " << boxes.at(col).front() << " to column " << col << "\n";
+                    boxes[col].push_front(c);
                     read_box = false;
                 }
 
@@ -51,9 +59,10 @@ int main()
         else
         {
             // Read move instructions
-            std::vector<uint16_t> move_info;
+            move_instructions.emplace_back();
+            std::vector<uint64_t>& move_info = move_instructions.back();
             uint16_t num = 0;
-            for (auto const ch : line)
+            for (auto const& ch : line)
             {
                 if (ch >= '0' && ch <= '9')
                 {
@@ -69,39 +78,37 @@ int main()
                     num = 0;
                 }
             }
-
             assert(move_info.size() == 3);
             assert(move_info[0] > 0);
             assert(move_info[1] > 0);
-            assert(move_info[1] > 0);
-
-
-            // Move boxes
-            for (auto i = 0; i < move_info[0]; i++)
-            {
-                const uint16_t n_boxes = move_info[0];
-                std::deque<char>& source_stack = boxes.at(move_info[1] - 1);
-                std::deque<char>& destination_stack = boxes.at(move_info[2] - 1);
-
-                char box_to_move = source_stack.at(source_stack.size() - n_boxes + i);
-                std::cout << "box2move: " << box_to_move << "\n";
-                std::cout << "size: " << source_stack.size() << "\n";
-                destination_stack.push_back(box_to_move);
-                source_stack.erase(source_stack.begin() + source_stack.size() - n_boxes + i);
-            }
+            assert(move_info[2] > 0);
         }
     }
+    input.close();
+    auto boxes2 = boxes; // Make a copy for part 2
 
-    // Print top boxes
-    std::cout << "Top boxes:\n";
-    for (auto b : boxes)
+    for (auto const& move_info : move_instructions)
     {
-        if (!b.empty()) {
-            std::cout << b.back();
-        }
+        const uint64_t n_boxes = move_info[0];
+        std::deque<char>& source_stack = boxes[move_info[1] - 1];
+        std::deque<char>& destination_stack = boxes[move_info[2] - 1];
+        std::deque<char>& source_stack2 = boxes2[move_info[1] - 1];
+        std::deque<char>& destination_stack2 = boxes2[move_info[2] - 1];
+
+        // Move boxes part 1
+        destination_stack.insert(destination_stack.end(),  source_stack.rbegin(), source_stack.rbegin() + static_cast<int>(n_boxes));
+        source_stack.erase(source_stack.end() - static_cast<int>(n_boxes), source_stack.end());
+
+        // Move boxes part 2
+        destination_stack2.insert(destination_stack2.end(), source_stack2.end() - static_cast<int>(n_boxes), source_stack2.end());
+        source_stack2.erase(source_stack2.end() - static_cast<int>(n_boxes), source_stack2.end());
     }
 
+    std::cout << "Top boxes part 1:";
+    print_top_boxes(boxes);
 
+    std::cout << "Top boxes part 2:";
+    print_top_boxes(boxes2);
 }
 
 

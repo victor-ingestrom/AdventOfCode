@@ -8,19 +8,15 @@
 
 int main()
 {
-
     std::cout << "=========================================\n";
-    std::cout << "\nAdvent of Code - Day 4\n\n";
+    std::cout << "Advent of Code - Day 4\n";
     std::cout << "=========================================\n";
 
-    // Read file content into stack
     std::ifstream input("input4");
     std::string line;
     uint16_t n_full_overlaps = 0;
     uint16_t n_overlaps = 0;
     while (std::getline(input, line)) {
-        std::cout << line << "\n";
-
         uint16_t num = 0;
         std::vector<uint16_t> assignments{};
         for (auto const ch: line) {
@@ -36,23 +32,23 @@ int main()
         }
         assert(assignments.size() == 4);
 
+        // Part 1
         if ((assignments[0] >= assignments[2] && assignments[1] <= assignments[3]) ||
                 (assignments[0] <= assignments[2] && assignments[1] >= assignments[3]))
         {
             n_full_overlaps++;
         }
 
+        // Part 2
         if ((assignments[1] >= assignments[2] && assignments[0] <= assignments[3]) ||
         (assignments[2] >= assignments[1] && assignments[3] <= assignments[0]))
         {
             n_overlaps++;
         }
-
-
-
-
     }
-    std::cout << "Full overlaps:" << n_full_overlaps << "\n";
-    std::cout << "Overlaps:" << n_overlaps << "\n";
+    input.close();
+
+    std::cout << "Full overlaps: " << n_full_overlaps << "\n";
+    std::cout << "Overlaps: " << n_overlaps << "\n";
 }
 

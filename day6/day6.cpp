@@ -1,23 +1,24 @@
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <vector>
 #include <algorithm>
-#include <assert.h>
-
 
 // Answers: 1702, 3559
 
-int main() {
-    std::cout << "Advent of Code - Day 6\n\n";
+int main()
+{
+    std::cout << "=========================================\n";
+    std::cout << "Advent of Code - Day 6\n";
+    std::cout << "=========================================\n";
 
-    // Read file content into stack
+    constexpr uint64_t SEQ_LENGTH_PART1 = 4; // Change to 4 to get answer for first part
+    constexpr uint64_t SEQ_LENGTH_PART2 = 14; // Change to 4 to get answer for first part
+
     std::ifstream input("input6");
-    std::string line;
     char c;
-
     std::vector<char> seq;
-    uint16_t n_char = 0;
+    uint64_t n_char = 0;
+    uint64_t part1_offset = 0;
     while (input.get(c))
     {
         n_char++;
@@ -28,22 +29,21 @@ int main() {
         }
         seq.push_back(c);
 
-        // DEBUG
-        for (auto const &s : seq)
+        // Part 1
+        if (seq.size() >= SEQ_LENGTH_PART1 && !part1_offset)
         {
-            std::cout << s;
+            part1_offset = n_char;
         }
-        std::cout << "\n";
 
-
-        if (seq.size() >= 14)
+        // Part 2
+        if (seq.size() >= SEQ_LENGTH_PART2)
         {
             break;
         }
-
-
     }
+    input.close();
 
-    std::cout << "offset:" << n_char << "\n";
+    std::cout << "Offset Part 1: " << part1_offset << "\n";
+    std::cout << "Offset Part 2: " << n_char << "\n";
 
 }
