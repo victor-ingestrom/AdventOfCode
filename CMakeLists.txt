@@ -21,6 +21,8 @@ set(input_data
     "day7/test_input7"
     "day8/input8"
     "day8/test_input8"
+    "day25/input25"
+    "day25/test_input25"
 )
 
 message(STATUS "Copying input data to: ${CMAKE_BINARY_DIR}")
@@ -38,3 +40,4 @@ add_executable(d5 day5/day5.cpp)
 add_executable(d6 day6/day6.cpp)
 add_executable(d7 day7/day7.cpp)
 add_executable(d8 day8/day8.cpp)
+add_executable(d25 day25/day25.cpp)
